@@ -336,16 +336,25 @@ for idx, row in df_points.iterrows():
             icon=folium.Icon(color="black", icon="home"),
         ).add_to(fmap)
     else:
-        folium.Marker(
-            [row["latitude"], row["longitude"]],
-            popup=f"{row['node_id']} - {row['waste_kg']:.0f} kg",
-            tooltip=f"{row['node_id']} – {row['waste_kg']:.0f} kg",
-            icon=folium.Icon(
-                color="green",
-                icon="trash",
-                prefix="fa"
-            ),
-        ).add_to(fmap)
+    trash_icon = folium.DivIcon(
+        html=f"""
+        <div style="
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            white-space: nowrap;
+        ">
+            <div>{row['node_id']}</div>
+            <div style="font-size: 25px;">🗑️</div>
+        </div>
+        """
+    )
+
+    folium.Marker(
+        [row["latitude"], row["longitude"]],
+        popup=f"{row['node_id']} - {row['waste_kg']:.0f} kg",
+        icon=trash_icon,
+    ).add_to(fmap)
 
 
 def _draw_routes(routes, color, label_prefix):
