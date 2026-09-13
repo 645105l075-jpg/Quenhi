@@ -337,6 +337,7 @@ for idx, row in df_points.iterrows():
         ).add_to(fmap)
 
     else:
+        # Biểu tượng thùng rác + mã điểm màu đen
         trash_icon = folium.DivIcon(
             html=f"""
             <div style="
@@ -358,6 +359,50 @@ for idx, row in df_points.iterrows():
             tooltip=f"{row['node_id']} - {row['waste_kg']:.0f} kg",
             icon=trash_icon,
         ).add_to(fmap)
+
+
+# Vẽ các tuyến đường
+def _draw_routes(routes, color, label_prefix):
+    for r in routes:
+        ordered_coords = tuple(coords[i] for i in r.node_sequence)
+
+        geometry = get_osrm_route_geometry(
+            ordered_coords,
+            base_url=res["osrm_base_url"]
+        )
+
+        if not geometry:
+            geometry = list(ordered_coords)
+            dash = "5, 10"
+        else:
+            dash = None
+
+        folium.PolyLine(
+            geometry,
+            color=color,
+            weight=4,
+            opacity=0.8,
+            dash_array=dash,
+            tooltip=f"{label_prefix} - Vehicle {r.vehicle_id} "
+                    f"({r.total_distance_m/1000:.2f} km)",
+        ).add_to(fmap)
+
+
+_draw_routes(baseline_routes, "#1f77b4", "Baseline")
+_draw_routes(optimized_routes, "#d62728", "Optimized")
+
+st.caption(
+    "🔵 Xanh dương = Baseline (Nearest Neighbor/Greedy) · "
+    "🔴 Đỏ = Optimized (OR-Tools + GLS). "
+    "Nét đứt (nếu có) nghĩa là OSRM Route Service không trả về được geometry cho đoạn đó."
+)
+
+st_folium(
+    fmap,
+    use_container_width=True,
+    height=600,
+    returned_objects=[]
+)
 
 
 def _draw_routes(routes, color, label_prefix):
