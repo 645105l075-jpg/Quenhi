@@ -335,7 +335,7 @@ for idx, row in df_points.iterrows():
             popup="DEPOT",
             icon=folium.Icon(color="black", icon="home"),
         ).add_to(fmap)
-    else:
+    khác:
     trash_icon = folium.DivIcon(
         html=f"""
         <div style="
