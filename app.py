@@ -372,7 +372,7 @@ def _draw_routes(routes, color, label_prefix):
             dash = None
         folium.PolyLine(
             geometry,
-            color=color,
+            color=black,
             weight=4,
             opacity=0.8,
             dash_array=dash,
