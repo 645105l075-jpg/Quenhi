@@ -343,6 +343,7 @@ for idx, row in df_points.iterrows():
                 text-align: center;
                 font-size: 13px;
                 font-weight: bold;
+                color: black;
                 white-space: nowrap;
             ">
                 <div>{row['node_id']}</div>
