@@ -336,13 +336,15 @@ for idx, row in df_points.iterrows():
             icon=folium.Icon(color="black", icon="home"),
         ).add_to(fmap)
     else:
-        folium.CircleMarker(
+        folium.Marker(
             [row["latitude"], row["longitude"]],
-            radius=5,
             popup=f"{row['node_id']} - {row['waste_kg']:.0f} kg",
-            color="#555555",
-            fill=True,
-            fill_opacity=0.8,
+            tooltip=f"{row['node_id']} – {row['waste_kg']:.0f} kg",
+            icon=folium.Icon(
+                color="green",
+                icon="trash",
+                prefix="fa"
+            ),
         ).add_to(fmap)
 
 
